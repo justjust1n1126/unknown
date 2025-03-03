@@ -1,67 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Game Madness</title>
+<title>unknown</title>
 <style>
-body{background:#1a1a1a;color:#fff;font-family:Arial;margin:0;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.game{background:#2a2a2a;border-radius:10px;padding:20px;box-shadow:0 0 10px #0ff;position:relative}
-canvas{border:2px solid #0ff}
-button{background:#0ff;border:0;padding:10px 20px;margin:5px;cursor:pointer}
-h2{color:#0ff;margin:0 0 10px}
-.hidden{display:none}
+body { background: #1a1a1a; color: #fff; font-family: Arial; margin: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.game { background: #2a2a2a; padding: 20px; border-radius: 10px; border: 2px solid #0ff; }
+canvas { border: 1px solid #0ff; }
+button { background: #0ff; color: #000; border: none; padding: 8px 16px; margin: 5px; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<div class="game"><h2>Tic Tac Toe</h2><div id="ttt"></div><button onclick="resetTTT()">Reset</button></div>
-<div class="game"><h2>Memory Card</h2><div id="memory"></div></div>
-<div class="game"><h2>Snake</h2><canvas id="snake" width="300" height="300"></canvas></div>
-<div class="game"><h2>Pong</h2><canvas id="pong" width="300" height="200"></canvas></div>
-<div class="game"><h2>Click Speed</h2><div id="clickCounter">0</div><button onclick="speedClick()">Click!</button></div>
-<div class="game"><h2>Color Match</h2><div id="colorBox"></div><button onclick="genColor()">New Color</button></div>
-<div class="game"><h2>Reaction Time</h2><div id="reactBox">Click when red</div></div>
-<div class="game"><h2>Number Guesser</h2><input type="number" id="guess"><button onclick="checkGuess()">Check</button></div>
-<div class="game"><h2>Typing Test</h2><div id="typingText"></div><input type="text" id="typingInput"></div>
-<div class="game"><h2>Maze</h2><canvas id="maze" width="300" height="300"></canvas></div>
-<div class="game"><h2>Hangman</h2><div id="hangmanWord"></div><input type="text" maxlength="1" id="hangmanInput"></div>
-<div class="game"><h2>Simon</h2><div id="simon"></div></div>
-<div class="game"><h2>Dice Roll</h2><div id="dice"></div><button onclick="rollDice()">Roll</button></div>
-<div class="game"><h2>RPS</h2><button onclick="playRPS('rock')">Rock</button><button onclick="playRPS('paper')">Paper</button><button onclick="playRPS('scissors')">Scissors</button><div id="rpsResult"></div></div>
-<div class="game"><h2>Whac-a-Mole</h2><div id="moles"></div></div>
-<div class="game"><h2>Breakout</h2><canvas id="breakout" width="300" height="400"></canvas></div>
-<div class="game"><h2>2048</h2><div id="game2048"></div></div>
-<div class="game"><h2>Sudoku</h2><div id="sudoku"></div></div>
-<div class="game"><h2>Space Invaders</h2><canvas id="invaders" width="300" height="400"></canvas></div>
-<div class="game"><h2>Flappy</h2><canvas id="flappy" width="300" height="400"></canvas></div>
-<div class="game"><h2>Quiz</h2><div id="quizQuestion"></div><div id="quizAnswers"></div></div>
-<div class="game"><h2>Paint</h2><canvas id="paint" width="300" height="300"></canvas></div>
-<div class="game"><h2>Etch-a-Sketch</h2><canvas id="etch" width="300" height="300"></canvas></div>
-<div class="game"><h2>Calculator</h2><div id="calc"></div></div>
+<div class="game">
+    <h2>Snake</h2>
+    <canvas id="snake" width="300" height="300"></canvas>
+</div>
+
+<div class="game">
+    <h2>Tic Tac Toe</h2>
+    <div id="ttt" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 300px;">
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+        <button class="cell" style="height: 50px;"></button>
+    </div>
+    <button onclick="resetTTT()">Reset</button>
+</div>
+
+<div class="game">
+    <h2>Reaction Test</h2>
+    <div id="react" style="width: 300px; height: 100px; background: #333; display: grid; place-items: center; cursor: pointer;">
+        Click to Start
+    </div>
+    <div id="result" style="margin-top: 10px;"></div>
+</div>
+
+<div class="game">
+    <h2>Pong</h2>
+    <canvas id="pong" width="300" height="200"></canvas>
+</div>
+
+<div class="game">
+    <h2>Click Speed</h2>
+    <div style="font-size: 24px; margin: 10px 0;" id="clicks">0</div>
+    <button onclick="increment()" style="width: 100%;">CLICK!</button>
+</div>
+
+<div class="game">
+    <h2>Color Match</h2>
+    <div id="colorBox" style="width: 100px; height: 100px; margin: 10px auto;"></div>
+    <button onclick="newColor()">New Color</button>
+</div>
 
 <script>
-let tttBoard=['','','','','','','','',''],currentPlayer='X';function resetTTT(){tttBoard=['','','','','','','','',''];document.querySelectorAll('.ttt-cell').forEach(e=>e.textContent='')}document.getElementById('ttt').innerHTML=Array(9).fill().map((_,i)=>`<button class="ttt-cell" onclick="handleTTT(${i})" style="width:30%;height:50px"></button>`).join('');function handleTTT(i){if(!tttBoard[i]){tttBoard[i]=currentPlayer;document.querySelectorAll('.ttt-cell')[i].textContent=currentPlayer;currentPlayer=currentPlayer==='X'?'O':'X'}}
+let ttt = ['','','','','','','','',''], turn = 'X';
+document.querySelectorAll('.cell').forEach((cell, i) => {
+    cell.addEventListener('click', () => {
+        if(!ttt[i]) {
+            ttt[i] = turn;
+            cell.textContent = turn;
+            turn = turn === 'X' ? 'O' : 'X';
+        }
+    });
+});
+function resetTTT() {
+    ttt = ['','','','','','','','',''];
+    document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
+}
 
-let clickCount=0;function speedClick(){clickCount++;document.getElementById('clickCounter').textContent=clickCount;setTimeout(()=>clickCount=0,1000)}
+let start, timeout;
+document.getElementById('react').addEventListener('click', function() {
+    if(this.style.background === 'green') return;
+    if(this.style.background === 'red') {
+        const time = Date.now() - start;
+        this.textContent = `${time}ms`;
+        this.style.background = 'green';
+        clearTimeout(timeout);
+    } else {
+        this.style.background = 'red';
+        this.textContent = 'Wait...';
+        timeout = setTimeout(() => {
+            start = Date.now();
+            this.textContent = 'CLICK NOW!';
+        }, Math.random() * 3000 + 1000);
+    }
+});
 
-let targetColor;function genColor(){targetColor=`hsl(${Math.random()*360},70%,50%)`;document.getElementById('colorBox').style.backgroundColor=targetColor}
+let clicks = 0;
+function increment() {
+    clicks++;
+    document.getElementById('clicks').textContent = clicks;
+    setTimeout(() => clicks = 0, 1000);
+}
 
-let reactStart;document.getElementById('reactBox').addEventListener('click',function(){if(this.style.backgroundColor==='red'){this.textContent=`${Date.now()-reactStart}ms`;this.style.backgroundColor='green'}else{this.style.backgroundColor='red';reactStart=Date.now()}})
+function newColor() {
+    const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+    document.getElementById('colorBox').style.background = color;
+}
 
-let secretNumber=Math.floor(Math.random()*100)+1;function checkGuess(){const guess=parseInt(document.getElementById('guess').value);document.getElementById('guess').value='';alert(guess===secretNumber?'Correct!':guess>secretNumber?'Lower':'Higher')}
+const snake = document.getElementById('snake').getContext('2d');
+let x = 150, y = 150, dx = 15, dy = 0, trail = [], tail = 5;
+function gameLoop() {
+    x += dx;
+    y += dy;
+    if(x < 0) x = 285;
+    if(x > 285) x = 0;
+    if(y < 0) y = 285;
+    if(y > 285) y = 0;
+    snake.fillStyle = '#1a1a1a';
+    snake.fillRect(0, 0, 300, 300);
+    snake.fillStyle = '#0ff';
+    trail.forEach(t => snake.fillRect(t.x, t.y, 14, 14));
+    trail.push({x, y});
+    while(trail.length > tail) trail.shift();
+    requestAnimationFrame(gameLoop);
+}
+document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -15; }
+    if(e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 15; }
+    if(e.key === 'ArrowLeft' && dx === 0) { dx = -15; dy = 0; }
+    if(e.key === 'ArrowRight' && dx === 0) { dx = 15; dy = 0; }
+});
+gameLoop();
 
-let typingWords=['example','test','javascript','coding','challenge'],currentWord=typingWords[Math.floor(Math.random()*typingWords.length)];document.getElementById('typingText').textContent=currentWord;document.getElementById('typingInput').addEventListener('input',function(){if(this.value===currentWord){alert('Correct!');currentWord=typingWords[Math.floor(Math.random()*typingWords.length)];document.getElementById('typingText').textContent=currentWord;this.value=''}})
-
-let hangmanWord='EXAMPLE',guessedLetters=[];document.getElementById('hangmanInput').addEventListener('input',function(){const letter=this.value.toUpperCase();if(!guessedLetters.includes(letter)){guessedLetters.push(letter);document.getElementById('hangmanWord').textContent=hangmanWord.split('').map(c=>guessedLetters.includes(c)?c:'_').join(' ');this.value=''}})
-
-function rollDice(){document.getElementById('dice').innerHTML=`<div style="font-size:50px">${Math.ceil(Math.random()*6)}</div>`}
-
-function playRPS(choice){const choices=['rock','paper','scissors'],computer=choices[Math.floor(Math.random()*3)];document.getElementById('rpsResult').textContent=`Computer chose ${computer}: ${choice===computer?'Tie!':(choice==='rock'&&computer==='scissors')||(choice==='paper'&&computer==='rock')||(choice==='scissors'&&computer==='paper')?'You Win!':'You Lose!'}`}
-
-let moles=Array(9).fill().map((_,i)=>`<button style="width:30%;height:60px" onclick="whack(${i})">${Math.random()<0.2?'🐭':' '}</button>`);document.getElementById('moles').innerHTML=moles.join('');function whack(i){if(moles[i].includes('🐭')){moles[i]='💥';document.getElementById('moles').innerHTML=moles.join('');setTimeout(()=>{moles=Array(9).fill().map((_,i)=>`<button style="width:30%;height:60px" onclick="whack(${i})">${Math.random()<0.2?'🐭':' '}</button>`);document.getElementById('moles').innerHTML=moles.join('')},500)}}
-
-const canvas=document.getElementById('snake'),ctx=canvas.getContext('2d'),grid=15;let snake=[{x:150,y:150}],dx=grid,dy=0,food={x:Math.floor(Math.random()*20)*grid,y:Math.floor(Math.random()*20)*grid};function drawSnake(){ctx.fillStyle='#0ff';snake.forEach(segment=>ctx.fillRect(segment.x,segment.y,grid-2,grid-2));ctx.fillStyle='red';ctx.fillRect(food.x,food.y,grid-2,grid-2)}function updateSnake(){const head={x:snake[0].x+dx,y:snake[0].y+dy};snake.unshift(head);if(head.x===food.x&&head.y===food.y){food={x:Math.floor(Math.random()*20)*grid,y:Math.floor(Math.random()*20)*grid}else{snake.pop()}ctx.clearRect(0,0,300,300);drawSnake()}document.addEventListener('keydown',e=>{if(e.key==='ArrowUp'&&dy===0)dy=-grid,dx=0;if(e.key==='ArrowDown'&&dy===0)dy=grid,dx=0;if(e.key==='ArrowLeft'&&dx===0)dx=-grid,dy=0;if(e.key==='ArrowRight'&&dx===0)dx=grid,dy=0});setInterval(updateSnake,100)
-
-const pong=document.getElementById('pong').getContext('2d'),paddleHeight=60,paddleWidth=10,ballSize=8;let paddleY=70,ballX=150,ballY=100,ballDX=2,ballDY=2;function drawPong(){pong.clearRect(0,0,300,200);pong.fillStyle='#0ff';pong.fillRect(0,paddleY,paddleWidth,paddleHeight);pong.fillRect(290,paddleY,paddleWidth,paddleHeight);pong.beginPath();pong.arc(ballX,ballY,ballSize,0,Math.PI*2);pong.fill();ballX+=ballDX;ballY+=ballDY;if(ballY<=0||ballY>=200)ballDY*=-1;if(ballX<=paddleWidth&&ballY>=paddleY&&ballY<=paddleY+paddleHeight||ballX>=290-paddleWidth&&ballY>=paddleY&&ballY<=paddleY+paddleHeight)ballDX*=-1;if(ballX<0||ballX>300)ballX=150,ballY=100}document.addEventListener('mousemove',e=>{paddleY=e.clientY-50});setInterval(drawPong,1000/60)
+const pong = document.getElementById('pong').getContext('2d');
+let py = 80, ballX = 150, ballY = 100, bdx = 3, bdy = 3;
+function updatePong() {
+    ballX += bdx;
+    ballY += bdy;
+    if(ballY < 0 || ballY > 185) bdy *= -1;
+    if((ballX < 20 && ballY > py && ballY < py + 40) || 
+       (ballX > 270 && ballY > py && ballY < py + 40)) bdx *= -1;
+    if(ballX < 0 || ballX > 300) ballX = 150, ballY = 100;
+    pong.fillStyle = '#1a1a1a';
+    pong.fillRect(0, 0, 300, 200);
+    pong.fillStyle = '#0ff';
+    pong.fillRect(0, py, 10, 40);
+    pong.fillRect(290, py, 10, 40);
+    pong.beginPath();
+    pong.arc(ballX, ballY, 8, 0, Math.PI * 2);
+    pong.fill();
+    requestAnimationFrame(updatePong);
+}
+document.addEventListener('mousemove', e => {
+    py = e.clientY - 50;
+    if(py < 0) py = 0;
+    if(py > 160) py = 160;
+});
+updatePong();
 </script>
 </body>
 </html>
