@@ -13,7 +13,7 @@ button { background: #0ff; color: #000; border: none; padding: 8px 16px; margin:
 
     <div class="game">
     <h2>Reaction Test</h2>
-    <div id="react" style="width: 300px; height: 100px; background: #333; display: grid; place-items: center; cursor: pointer;">
+    <div id="react" style="width: 300px; height: 100px; background: #333; display: block; place-items: center; cursor: pointer;">
         Click to Start
     </div>
     <div id="result" style="margin-top: 10px;"></div>
@@ -22,20 +22,6 @@ button { background: #0ff; color: #000; border: none; padding: 8px 16px; margin:
 
 
 <script>
-let ttt = ['','','','','','','','',''], turn = 'X';
-document.querySelectorAll('.cell').forEach((cell, i) => {
-    cell.addEventListener('click', () => {
-        if(!ttt[i]) {
-            ttt[i] = turn;
-            cell.textContent = turn;
-            turn = turn === 'X' ? 'O' : 'X';
-        }
-    });
-});
-function resetTTT() {
-    ttt = ['','','','','','','','',''];
-    document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
-}
 
 let start, timeout;
 document.getElementById('react').addEventListener('click', function() {
@@ -55,68 +41,10 @@ document.getElementById('react').addEventListener('click', function() {
     }
 });
 
-let clicks = 0;
-function increment() {
-    clicks++;
-    document.getElementById('clicks').textContent = clicks;
-    setTimeout(() => clicks = 0, 1000);
-}
 
-function newColor() {
-    const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
-    document.getElementById('colorBox').style.background = color;
-}
 
-const snake = document.getElementById('snake').getContext('2d');
-let x = 150, y = 150, dx = 15, dy = 0, trail = [], tail = 5;
-function gameLoop() {
-    x += dx;
-    y += dy;
-    if(x < 0) x = 285;
-    if(x > 285) x = 0;
-    if(y < 0) y = 285;
-    if(y > 285) y = 0;
-    snake.fillStyle = '#1a1a1a';
-    snake.fillRect(0, 0, 300, 300);
-    snake.fillStyle = '#0ff';
-    trail.forEach(t => snake.fillRect(t.x, t.y, 14, 14));
-    trail.push({x, y});
-    while(trail.length > tail) trail.shift();
-    requestAnimationFrame(gameLoop);
-}
-document.addEventListener('keydown', e => {
-    if(e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -15; }
-    if(e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 15; }
-    if(e.key === 'ArrowLeft' && dx === 0) { dx = -15; dy = 0; }
-    if(e.key === 'ArrowRight' && dx === 0) { dx = 15; dy = 0; }
-});
-gameLoop();
 
-const pong = document.getElementById('pong').getContext('2d');
-let py = 80, ballX = 150, ballY = 100, bdx = 3, bdy = 3;
-function updatePong() {
-    ballX += bdx;
-    ballY += bdy;
-    if(ballY < 0 || ballY > 185) bdy *= -1;
-    if((ballX < 20 && ballY > py && ballY < py + 40) || 
-       (ballX > 270 && ballY > py && ballY < py + 40)) bdx *= -1;
-    if(ballX < 0 || ballX > 300) ballX = 150, ballY = 100;
-    pong.fillStyle = '#1a1a1a';
-    pong.fillRect(0, 0, 300, 200);
-    pong.fillStyle = '#0ff';
-    pong.fillRect(0, py, 10, 40);
-    pong.fillRect(290, py, 10, 40);
-    pong.beginPath();
-    pong.arc(ballX, ballY, 8, 0, Math.PI * 2);
-    pong.fill();
-    requestAnimationFrame(updatePong);
-}
-document.addEventListener('mousemove', e => {
-    py = e.clientY - 50;
-    if(py < 0) py = 0;
-    if(py > 160) py = 160;
-});
-updatePong();
+
 </script>
 </body>
 </html>
