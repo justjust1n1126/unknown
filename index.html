@@ -11,28 +11,7 @@ button { background: #0ff; color: #000; border: none; padding: 8px 16px; margin:
 </head>
 <body>
 
-<div class="game">
-    <h2>Snake</h2>
-    <canvas id="snake" width="300" height="300"></canvas>
-</div>
-
-<div class="game">
-    <h2>Tic Tac Toe</h2>
-    <div id="ttt" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 300px;">
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-        <button class="cell" style="height: 50px;"></button>
-    </div>
-    <button onclick="resetTTT()">Reset</button>
-</div>
-
-<div class="game">
+    <div class="game">
     <h2>Reaction Test</h2>
     <div id="react" style="width: 300px; height: 100px; background: #333; display: grid; place-items: center; cursor: pointer;">
         Click to Start
@@ -40,22 +19,7 @@ button { background: #0ff; color: #000; border: none; padding: 8px 16px; margin:
     <div id="result" style="margin-top: 10px;"></div>
 </div>
 
-<div class="game">
-    <h2>Pong</h2>
-    <canvas id="pong" width="300" height="200"></canvas>
-</div>
 
-<div class="game">
-    <h2>Click Speed</h2>
-    <div style="font-size: 24px; margin: 10px 0;" id="clicks">0</div>
-    <button onclick="increment()" style="width: 100%;">CLICK!</button>
-</div>
-
-<div class="game">
-    <h2>Color Match</h2>
-    <div id="colorBox" style="width: 100px; height: 100px; margin: 10px auto;"></div>
-    <button onclick="newColor()">New Color</button>
-</div>
 
 <script>
 let ttt = ['','','','','','','','',''], turn = 'X';
